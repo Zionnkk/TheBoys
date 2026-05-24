@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>The Boys</title>
+
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="shortcut icon" href="./favicon.png">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="motion-on">
+  <div id="cursor" class="cursor"></div>
+
+  <section id="intro" class="intro">
+    <div class="grain"></div>
+    <div class="vignette"></div>
+
+    <button id="skipBtn" class="skip-btn ui-sound">
+      <span>+</span> pular
+    </button>
+
+    <div class="radio-wrap">
+      <div class="radio">
+        <header class="radio-header">
+          <div>
+            <p class="micro">transmissão clandestina</p>
+            <h1 class="dirty-title">sintonize</h1>
+          </div>
+
+          <div id="lamp" class="lamp"></div>
+        </header>
+
+        <div class="radio-screen">
+          <div class="screen-top">
+            <span>62</span>
+            <span>68</span>
+            <span>74</span>
+            <span>80</span>
+            <span>86</span>
+          </div>
+
+          <div class="wave-stage">
+            <canvas id="waveCanvas"></canvas>
+            <div class="center-line"></div>
+          </div>
+
+          <p id="radioStatus">sinal perdido // alinhe as ondas</p>
+        </div>
+
+      <div class="knob-grid">
+  <div class="knob-card">
+    <div class="knob-dial">
+      <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+
+      <div id="knobA" class="military-knob ui-sound" data-input="waveA">
+        <div class="knob-rotor">
+          <div class="knob-pointer"></div>
+          <div class="knob-screw screw-a"></div>
+          <div class="knob-screw screw-b"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>onda A</p>
+    <input id="waveA" type="range" min="0" max="100" value="18" />
+  </div>
+
+  <div class="knob-card">
+    <div class="knob-dial">
+      <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+
+      <div id="knobB" class="military-knob ui-sound" data-input="waveB">
+        <div class="knob-rotor">
+          <div class="knob-pointer"></div>
+          <div class="knob-screw screw-a"></div>
+          <div class="knob-screw screw-b"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>onda B</p>
+    <input id="waveB" type="range" min="0" max="100" value="84" />
+  </div>
+</div>
+
+        <button id="audioBtn" class="audio-btn ui-sound">
+          ativar ruído
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <main class="site">
+    <nav class="top-menu">
+      <div class="brand dirty-title">THE BOYS</div>
+
+      <button class="nav-btn ui-sound">cronologia</button>
+      <button class="nav-btn ui-sound menu-toggle" data-panel="pacotes">pacotes</button>
+      <button class="nav-btn ui-sound">supers</button>
+      <button class="nav-btn ui-sound">voughts</button>
+      <button class="nav-btn ui-sound alleged menu-toggle" data-panel="niveis">
+        "supostos" supers
+      </button>
+
+      <button id="motionBtn" class="motion-btn ui-sound">
+        animações: on
+      </button>
+    </nav>
+
+    <section class="submenu-area">
+      <div id="pacotes" class="submenu-panel"></div>
+      <div id="niveis" class="submenu-panel small"></div>
+    </section>
+
+    <section class="home">
+      <article class="dossier">
+        <p class="micro red">dossiê recuperado</p>
+
+        <h2 class="dirty-title">nao confie nos supers</h2>
+
+        <p>
+          Um arquivo vazado, sujo e incompleto. Nomes, pacotes, rumores,
+          provas rasgadas e relatórios que alguém tentou enterrar antes que
+          chegassem até você.
+        </p>
+
+        <div class="evidence">
+          <span>CASO V-07</span>
+          <span>FITAS DANIFICADAS</span>
+          <span>PROVA SUMIU</span>
+          <span>ARQUIVO RASGADO</span>
+        </div>
+      </article>
+
+      <aside class="side">
+        <div class="note">
+          <h3>estado do arquivo</h3>
+          <p>vai tomar no cu azevedo fdpt xD </p>
+        </div>
+
+        <div class="note updates">
+  <h3>atualizações</h3>
+
+  <div class="update-item">
+    <span class="update-dot"></span>
+    <div>
+      <strong>Base feita</strong>
+      <p>Estrutura principal do site concluída.</p>
+    </div>
+  </div>
+
+  <div class="update-item">
+    <span class="update-dot"></span>
+    <div>
+      <strong>Menus feitos</strong>
+      <p>Submenus animados e sistema de navegação adicionados.</p>
+    </div>
+  </div>
+
+  <div class="update-item">
+    <span class="update-dot"></span>
+    <div>
+      <strong>Menus feitos</strong>
+      <p>Submenus animados e sistema de navegação adicionados.</p>
+    </div>
+  </div>
+
+  <div class="update-item">
+    <span class="update-dot"></span>
+    <div>
+      <strong>Site tem ícone</strong>
+      <p>Icone oficial do projeto adicionado.</p>
+    </div>
+  </div>
+</div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
