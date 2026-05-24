@@ -6,21 +6,22 @@
 
   <title>The Boys</title>
 
-  <link rel="icon" type="image/png" href="./favicon.png">
-  <link rel="shortcut icon" href="./favicon.png">
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <link rel="shortcut icon" type="image/png" href="./favicon.png" />
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body class="motion-on">
-  <div id="cursor" class="cursor"></div>
+  <div id="cursor" class="cursor" aria-hidden="true"></div>
 
   <section id="intro" class="intro">
-    <div class="grain"></div>
-    <div class="vignette"></div>
+    <div class="intro-noise" aria-hidden="true"></div>
+    <div class="intro-vignette" aria-hidden="true"></div>
 
-    <button id="skipBtn" class="skip-btn ui-sound">
-      <span>+</span> pular
+    <button id="skipBtn" class="skip-btn ui-sound" type="button">
+      <span>+</span>
+      pular
     </button>
 
     <div class="radio-wrap">
@@ -31,7 +32,7 @@
             <h1 class="dirty-title">sintonize</h1>
           </div>
 
-          <div id="lamp" class="lamp"></div>
+          <div id="lamp" class="lamp" aria-hidden="true"></div>
         </header>
 
         <div class="radio-screen">
@@ -45,49 +46,57 @@
 
           <div class="wave-stage">
             <canvas id="waveCanvas"></canvas>
-            <div class="center-line"></div>
+            <div class="center-line" aria-hidden="true"></div>
           </div>
 
           <p id="radioStatus">sinal perdido // alinhe as ondas</p>
         </div>
 
-      <div class="knob-grid">
-  <div class="knob-card">
-    <div class="knob-dial">
-      <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+        <div class="knob-grid">
+          <div class="knob-card">
+            <div class="knob-dial">
+              <span>0</span>
+              <span>25</span>
+              <span>50</span>
+              <span>75</span>
+              <span>100</span>
 
-      <div id="knobA" class="military-knob ui-sound" data-input="waveA">
-        <div class="knob-rotor">
-          <div class="knob-pointer"></div>
-          <div class="knob-screw screw-a"></div>
-          <div class="knob-screw screw-b"></div>
+              <div id="knobA" class="military-knob ui-sound" data-input="waveA">
+                <div class="knob-rotor">
+                  <div class="knob-pointer"></div>
+                  <div class="knob-screw screw-a"></div>
+                  <div class="knob-screw screw-b"></div>
+                </div>
+              </div>
+            </div>
+
+            <p>onda A</p>
+            <input id="waveA" type="range" min="0" max="100" value="18" />
+          </div>
+
+          <div class="knob-card">
+            <div class="knob-dial">
+              <span>0</span>
+              <span>25</span>
+              <span>50</span>
+              <span>75</span>
+              <span>100</span>
+
+              <div id="knobB" class="military-knob ui-sound" data-input="waveB">
+                <div class="knob-rotor">
+                  <div class="knob-pointer"></div>
+                  <div class="knob-screw screw-a"></div>
+                  <div class="knob-screw screw-b"></div>
+                </div>
+              </div>
+            </div>
+
+            <p>onda B</p>
+            <input id="waveB" type="range" min="0" max="100" value="84" />
+          </div>
         </div>
-      </div>
-    </div>
 
-    <p>onda A</p>
-    <input id="waveA" type="range" min="0" max="100" value="18" />
-  </div>
-
-  <div class="knob-card">
-    <div class="knob-dial">
-      <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
-
-      <div id="knobB" class="military-knob ui-sound" data-input="waveB">
-        <div class="knob-rotor">
-          <div class="knob-pointer"></div>
-          <div class="knob-screw screw-a"></div>
-          <div class="knob-screw screw-b"></div>
-        </div>
-      </div>
-    </div>
-
-    <p>onda B</p>
-    <input id="waveB" type="range" min="0" max="100" value="84" />
-  </div>
-</div>
-
-        <button id="audioBtn" class="audio-btn ui-sound">
+        <button id="audioBtn" class="audio-btn ui-sound" type="button">
           ativar ruído
         </button>
       </div>
@@ -98,15 +107,21 @@
     <nav class="top-menu">
       <div class="brand dirty-title">THE BOYS</div>
 
-      <button class="nav-btn ui-sound">cronologia</button>
-      <button class="nav-btn ui-sound menu-toggle" data-panel="pacotes">pacotes</button>
-      <button class="nav-btn ui-sound">supers</button>
-      <button class="nav-btn ui-sound">voughts</button>
-      <button class="nav-btn ui-sound alleged menu-toggle" data-panel="niveis">
+      <button class="nav-btn ui-sound" type="button">cronologia</button>
+
+      <button class="nav-btn ui-sound menu-toggle" type="button" data-panel="pacotes">
+        pacotes
+      </button>
+
+      <button class="nav-btn ui-sound" type="button">supers</button>
+
+      <button class="nav-btn ui-sound" type="button">voughts</button>
+
+      <button class="nav-btn ui-sound alleged menu-toggle" type="button" data-panel="niveis">
         "supostos" supers
       </button>
 
-      <button id="motionBtn" class="motion-btn ui-sound">
+      <button id="motionBtn" class="motion-btn ui-sound" type="button">
         animações: on
       </button>
     </nav>
@@ -120,7 +135,7 @@
       <article class="dossier">
         <p class="micro red">dossiê recuperado</p>
 
-        <h2 class="dirty-title">nao confie nos supers</h2>
+        <h2 class="dirty-title">não confie nos supers</h2>
 
         <p>
           Um arquivo vazado, sujo e incompleto. Nomes, pacotes, rumores,
@@ -139,48 +154,44 @@
       <aside class="side">
         <div class="note">
           <h3>estado do arquivo</h3>
-          <p>vai tomar no cu azevedo fdpt xD </p>
+          <p>vai tomar no cu azevedo xD </p>
         </div>
 
         <div class="note updates">
-  <h3>atualizações</h3>
+          <h3>atualizações</h3>
 
-  <div class="update-item">
-    <span class="update-dot"></span>
-    <div>
-      <strong>Base feita</strong>
-      <p>Estrutura principal do site concluída.</p>
-    </div>
-  </div>
+          <div class="update-item">
+            <span class="update-dot"></span>
+            <div>
+              <strong>base feita</strong>
+              <p>estrutura principal do site concluída.</p>
+            </div>
+          </div>
 
-  <div class="update-item">
-    <span class="update-dot"></span>
-    <div>
-      <strong>Menus feitos</strong>
-      <p>Submenus animados e sistema de navegação adicionados.</p>
-    </div>
-  </div>
+          <div class="update-item">
+            <span class="update-dot"></span>
+            <div>
+              <strong>menus feitos</strong>
+              <p>submenus animados e sistema de navegação adicionados.</p>
+            </div>
+          </div>
 
-  <div class="update-item">
-    <span class="update-dot"></span>
-    <div>
-      <strong>Menus feitos</strong>
-      <p>Submenus animados e sistema de navegação adicionados.</p>
-    </div>
-  </div>
-
-  <div class="update-item">
-    <span class="update-dot"></span>
-    <div>
-      <strong>Site tem ícone</strong>
-      <p>Icone oficial do projeto adicionado.</p>
-    </div>
-  </div>
-</div>
+          <div class="update-item">
+            <span class="update-dot"></span>
+            <div>
+              <strong>site tem ícone</strong>
+              <p>favicon oficial do projeto adicionado.</p>
+            </div>
+          </div>
+        </div>
       </aside>
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="scratches" aria-hidden="true"></div>
+  <div class="dust" aria-hidden="true"></div>
+
+  <script src="./script.js"></script>
 </body>
 </html>
