@@ -597,3 +597,151 @@ skipBtn?.addEventListener("click", () => {
 
 updateRadio();
 drawWaves();
+function bloodBurst(element) {
+  const rect = element.getBoundingClientRect();
+
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top + rect.height / 2;
+
+  const fx = document.createElement("div");
+  fx.className = "blood-art";
+  fx.style.left = `${originX}px`;
+  fx.style.top = `${originY}px`;
+
+  document.body.appendChild(fx);
+
+  for (let i = 0; i < 7; i++) {
+    const streak = document.createElement("span");
+    streak.className = "blood-streak";
+
+    const side = Math.random() > 0.5 ? 1 : -1;
+
+    streak.style.setProperty("--w", `${45 + Math.random() * 90}px`);
+    streak.style.setProperty("--h", `${3 + Math.random() * 8}px`);
+    streak.style.setProperty("--x", `${side * (20 + Math.random() * 90)}px`);
+    streak.style.setProperty("--y", `${-35 + Math.random() * 70}px`);
+    streak.style.setProperty("--rot", `${-35 + Math.random() * 70}deg`);
+
+    fx.appendChild(streak);
+  }
+
+  for (let i = 0; i < 16; i++) {
+    const spark = document.createElement("span");
+    spark.className = "blood-spark";
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 25 + Math.random() * 95;
+
+    spark.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+    spark.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+    spark.style.setProperty("--s", `${3 + Math.random() * 7}px`);
+
+    fx.appendChild(spark);
+  }
+
+  setTimeout(() => {
+    fx.remove();
+  }, 900);
+}
+
+document.querySelectorAll(".nav-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    bloodBurst(button);
+  });
+});
+function closeIntro() {
+
+  if (radioAudio && radioMaster) {
+
+    radioMaster.gain.setTargetAtTime(
+      0,
+      radioAudio.currentTime,
+      0.05
+    );
+
+    setTimeout(() => {
+      radioAudio.close().catch(() => {});
+    }, 300);
+  }
+
+  intro?.classList.add("hide");
+
+  const bootScreen =
+    document.querySelector("#bootScreen");
+
+  const site =
+    document.querySelector(".site");
+
+  setTimeout(() => {
+
+    if (intro) {
+      intro.style.display = "none";
+    }
+
+    bootScreen?.classList.add("active");
+
+    /* TEMPO DO BOOT */
+
+    setTimeout(() => {
+
+      bootScreen?.classList.add("hide");
+
+      site?.classList.add("visible");
+
+    }, 4000);
+
+    setTimeout(() => {
+
+      bootScreen?.classList.remove("active");
+
+      if (bootScreen) {
+        bootScreen.style.display = "none";
+      }
+
+    }, 4800);
+
+  }, 700);
+}
+const dismissedUpdates =
+  JSON.parse(localStorage.getItem("dismissedUpdates") || "[]");
+
+document.querySelectorAll(".update-item").forEach((item, index) => {
+  const id =
+    item.dataset.updateId || `update-${index}`;
+
+  item.dataset.updateId = id;
+
+  if (dismissedUpdates.includes(id)) {
+    item.remove();
+    return;
+  }
+
+  item.setAttribute("role", "button");
+  item.setAttribute("tabindex", "0");
+  item.title = "Clique para ocultar esta atualização";
+
+  function dismissUpdate() {
+    const saved =
+      JSON.parse(localStorage.getItem("dismissedUpdates") || "[]");
+
+    if (!saved.includes(id)) {
+      saved.push(id);
+      localStorage.setItem("dismissedUpdates", JSON.stringify(saved));
+    }
+
+    item.classList.add("removing");
+
+    setTimeout(() => {
+      item.remove();
+    }, 280);
+  }
+
+  item.addEventListener("click", dismissUpdate);
+
+  item.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      dismissUpdate();
+    }
+  });
+});
