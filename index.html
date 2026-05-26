@@ -14,14 +14,15 @@
 
 <body class="motion-on">
   <div id="bootScreen" class="boot-screen">
-  <div class="boot-noise"></div>
+    <div class="boot-noise"></div>
 
-  <div class="boot-content">
-    <p class="boot-small">transmissão estabilizada</p>
-    <h1 class="boot-logo">THE BOYS</h1>
-    <p class="boot-loading">abrindo arquivo...</p>
+    <div class="boot-content">
+      <p class="boot-small">transmissão estabilizada</p>
+      <h1 class="boot-logo">THE BOYS</h1>
+      <p class="boot-loading">abrindo arquivo...</p>
+    </div>
   </div>
-</div>
+
   <div id="cursor" class="cursor" aria-hidden="true"></div>
 
   <section id="intro" class="intro">
@@ -32,7 +33,6 @@
       <span>+</span>
       pular
     </button>
-  
 
     <div class="radio-wrap">
       <div class="radio">
@@ -113,22 +113,27 @@
     </div>
   </section>
 
-
   <main class="site">
     <nav class="top-menu">
       <div class="brand dirty-title">THE BOYS</div>
 
-      <button class="nav-btn ui-sound" type="button">cronologia</button>
+      <button class="nav-btn ui-sound" type="button">
+        cronologia
+      </button>
 
       <button class="nav-btn ui-sound menu-toggle" type="button" data-panel="pacotes">
         pacotes
       </button>
 
-      <button class="nav-btn ui-sound" type="button">supers</button>
+      <button class="nav-btn ui-sound" type="button">
+        supers
+      </button>
 
-      <button class="nav-btn ui-sound" type="button">voughts</button>
+      <button class="nav-btn ui-sound" type="button">
+        voughts
+      </button>
 
-      <button class="nav-btn ui-sound alleged menu-toggle" type="button" data-panel="niveis">
+      <button class="nav-btn ui-sound page-link" type="button" data-page="humanos">
         humanos
       </button>
 
@@ -146,7 +151,7 @@
       <article class="dossier">
         <p class="micro red">dossiê recuperado</p>
 
-        <h2 class="dirty-title">nao confie nos supers</h2>
+        <h2 class="dirty-title">não confie nos supers</h2>
 
         <p>
           Um arquivo vazado, sujo e incompleto. Nomes, pacotes, rumores,
@@ -165,13 +170,13 @@
       <aside class="side">
         <div class="note">
           <h3>estado do arquivo</h3>
-          <p>vai tomar no cu azevedo xD </p>
+          <p>Material clandestino, manchado, remontado e incompleto.</p>
         </div>
 
         <div class="note updates">
           <h3>atualizações</h3>
 
-          <div class="update-item">
+          <div class="update-item" data-update-id="base-feita">
             <span class="update-dot"></span>
             <div>
               <strong>base feita</strong>
@@ -179,7 +184,7 @@
             </div>
           </div>
 
-          <div class="update-item">
+          <div class="update-item" data-update-id="menus-feitos">
             <span class="update-dot"></span>
             <div>
               <strong>menus feitos</strong>
@@ -187,7 +192,7 @@
             </div>
           </div>
 
-          <div class="update-item">
+          <div class="update-item" data-update-id="site-icone">
             <span class="update-dot"></span>
             <div>
               <strong>site tem ícone</strong>
@@ -196,6 +201,138 @@
           </div>
         </div>
       </aside>
+    </section>
+
+    <section id="humanos" class="page-section hidden">
+      <div class="human-wrapper">
+        <article class="human-card">
+          <p class="micro red">HUMANOS — DOSSIÊ DE CAMPO</p>
+
+          <h2 class="dirty-title">humanos</h2>
+
+          <div class="file-meta">
+            <span>Status: Ativos / Aprimorados / Alta Mortalidade</span>
+            <span>Classificação Pública: Humanos</span>
+            <span>Classificação Interna: V-Adaptados</span>
+          </div>
+
+          <div class="human-text">
+            <p>Esquece a história de que humano é presa fácil.</p>
+
+            <p>Isso morreu junto com a antiga Vought.</p>
+
+            <p>
+              Os humanos que operam hoje não são civis jogados contra supers esperando milagre.
+              Muitos carregam versões estabilizadas de aprimoramento físico inspiradas nos
+              protocolos usados pelos Boys durante operações clandestinas.
+            </p>
+
+            <p>
+              Não recebem voo, laser ou habilidades absurdas - mas ganham algo diferente:
+            </p>
+
+            <p class="highlight-line">um corpo preparado pra sobreviver.</p>
+
+            <p>
+              Força aumentada, resistência acima do normal, recuperação física elevada e adaptação
+              ao combate transformaram parte deles em operadores capazes de enfrentar supers sem
+              cair no primeiro golpe.
+            </p>
+
+            <p>
+              Diferente de supers, que geralmente nascem ou despertam já absurdos, humanos evoluem
+              através de exposição contínua a combate, trauma e pressão extrema. Quanto mais
+              sobrevivem, mais perigosos se tornam.
+            </p>
+
+            <p>Um humano que passa meses em operações começa a mudar.</p>
+
+            <p>
+              Os reflexos ficam mais rápidos. O corpo aprende a suportar dor. O medo deixa de
+              travar decisão. O combate deixa de parecer improviso.
+            </p>
+
+            <p>Cada missão deixa marca.</p>
+            <p>E cada marca vira adaptação.</p>
+          </div>
+
+          <h3>ADAPTAÇÃO OPERACIONAL</h3>
+
+          <p class="human-intro">Humanos se aprimoram através de:</p>
+
+          <div class="human-grid">
+            <div class="human-box">sobrevivência em combate</div>
+            <div class="human-box">treinamento contínuo</div>
+            <div class="human-box">exposição a supers</div>
+            <div class="human-box">operações clandestinas</div>
+            <div class="human-box">trauma físico e psicológico</div>
+            <div class="human-box">experiência acumulada</div>
+          </div>
+
+          <h3>EXEMPLOS DE EVOLUÇÃO</h3>
+
+          <div class="evolution-list">
+            <p>
+              <strong>Sobreviveu a uma explosão ou grande impacto?</strong>
+              <br />
+              resistência traumática, maior tolerância física e recuperação adaptada.
+            </p>
+
+            <p>
+              <strong>Enfrentou supers velozes repetidamente?</strong>
+              <br />
+              reflexos treinados e melhor leitura corporal.
+            </p>
+
+            <p>
+              <strong>Operou por longos períodos sob pressão?</strong>
+              <br />
+              resistência mental, foco e menor desgaste emocional.
+            </p>
+
+            <p>
+              <strong>Combateu supers corpo a corpo e saiu vivo?</strong>
+              <br />
+              técnica refinada, timing e agressividade operacional.
+            </p>
+
+            <p>
+              <strong>Participou de infiltrações e missões clandestinas?</strong>
+              <br />
+              furtividade, percepção e reação estratégica.
+            </p>
+          </div>
+
+          <h3>TRILHAS HUMANAS</h3>
+
+          <div class="track-grid">
+            <div>
+              <strong>Breaker</strong>
+              <span>Especialistas em confronto direto e pressão física.</span>
+            </div>
+
+            <div>
+              <strong>Hunter</strong>
+              <span>Caçadores focados em rastreio e neutralização.</span>
+            </div>
+
+            <div>
+              <strong>Black Ops</strong>
+              <span>Operadores clandestinos e combatentes refinados.</span>
+            </div>
+
+            <div>
+              <strong>Tank</strong>
+              <span>Corpos preparados pra absorver dano e permanecer em pé.</span>
+            </div>
+
+            <div>
+              <strong>Tactician</strong>
+              <span>Estratégia, coordenação e domínio operacional.</span>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 

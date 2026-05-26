@@ -745,3 +745,44 @@ document.querySelectorAll(".update-item").forEach((item, index) => {
     }
   });
 });
+document.querySelectorAll(".page-link").forEach((button) => {
+  button.addEventListener("click", () => {
+    const pageId = button.dataset.page;
+    const page = document.querySelector(`#${pageId}`);
+    const home = document.querySelector(".home");
+
+    document.querySelectorAll(".page-section").forEach((section) => {
+      section.classList.add("hidden");
+    });
+
+    if (home) home.classList.add("hidden");
+
+    if (page) {
+      page.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    dirtyClick();
+    cameraHit();
+  });
+});
+document.querySelectorAll(".page-link").forEach((button) => {
+  button.addEventListener("click", () => {
+    const pageId = button.dataset.page;
+    const page = document.querySelector(`#${pageId}`);
+    const home = document.querySelector(".home");
+
+    document.querySelectorAll(".page-section").forEach((section) => {
+      section.classList.add("hidden");
+    });
+
+    home?.classList.add("hidden");
+
+    page?.classList.remove("hidden");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+});
