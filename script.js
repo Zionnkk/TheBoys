@@ -1,60 +1,51 @@
 const packages = [
-  "Lamplighter",
-  "Tempesta",
-  "Children of the Sky",
-  "Luz-Estrela",
-  "Maratona",
-  "Trem-Bala",
-  "Maeve",
-  "Marie Moreau",
-  "Jordan Li",
-  "Golden Boy",
-  "Espoleta",
-  "Kimiko",
-  "Oh Pai",
-  "Mana Sábia",
-  "Black Noir",
-  "Aprendiz de Soldier Boy",
-  "Cindy",
-  "Sam Riordan",
-  "Cate Dunlap",
-  "Andre Anderson",
-  "Polarity",
-  "Crimson Countess",
-  "Shockwave",
-  "Blue Hawk",
-  "Mesmer",
-  "Doppelganger",
-  "Mindstorm",
-  "Nubian Prince",
-  "Silver Kincaid",
-  "Eagle the Archer",
-  "Blindspot",
-  "Popclaw",
-  "Termite",
-  "Swatto",
-  "TNT Twins",
-  "Tek Knight",
-  "Firecracker",
-  "Sister Sage",
-  "Supersonic",
-  "Love Sausage",
-  "Victoria Neuman",
-  "Maverick",
-  "Rufus",
-  "Little Cricket",
-  "Maverick"
+  "Lamplighter", "Tempesta", "Children of the Sky", "Luz-Estrela",
+  "Maratona", "Trem-Bala", "Maeve", "Marie Moreau", "Jordan Li",
+  "Golden Boy", "Espoleta", "Kimiko", "Oh Pai", "Mana Sábia",
+  "Black Noir", "Aprendiz de Soldier Boy", "Cindy", "Sam Riordan",
+  "Cate Dunlap", "Andre Anderson", "Polarity", "Crimson Countess",
+  "Shockwave", "Blue Hawk", "Mesmer", "Doppelganger", "Mindstorm",
+  "Nubian Prince", "Silver Kincaid", "Eagle the Archer", "Blindspot",
+  "Popclaw", "Termite", "Swatto", "TNT Twins", "Tek Knight",
+  "Firecracker", "Sister Sage", "Supersonic", "Love Sausage",
+  "Victoria Neuman", "Maverick", "Rufus", "Little Cricket", "Maverick"
 ];
 
 const levels = [
-  "Aprendiz",
-  "Operante",
-  "Veterano",
-  "Dominante",
-  "Titanico",
-  "Omega",
-  "Singular"
+  "Aprendiz", "Operante", "Veterano", "Dominante",
+  "Titanico", "Omega", "Singular"
 ];
+
+const intro = document.querySelector("#intro");
+const site = document.querySelector(".site");
+const bootScreen = document.querySelector("#bootScreen");
+const skipBtn = document.querySelector("#skipBtn");
+const audioBtn = document.querySelector("#audioBtn");
+const motionBtn = document.querySelector("#motionBtn");
+
+const cursor = document.querySelector("#cursor");
+
+const waveA = document.querySelector("#waveA");
+const waveB = document.querySelector("#waveB");
+const knobA = document.querySelector("#knobA");
+const knobB = document.querySelector("#knobB");
+const lamp = document.querySelector("#lamp");
+const radioStatus = document.querySelector("#radioStatus");
+const canvas = document.querySelector("#waveCanvas");
+const ctx = canvas?.getContext("2d");
+
+const packagePage = document.querySelector("#packagePage");
+const packageTitle = document.querySelector("#packageTitle");
+const packageMainTitle = document.querySelector("#packageMainTitle");
+const backFromPackageBtn = document.querySelector("#backFromPackageBtn");
+const backHomeBtn = document.querySelector("#backHomeBtn");
+
+let solved = false;
+let radioAudio;
+let radioMaster;
+let radioStatic;
+let radioFilter;
+let radioHum;
 
 /* SUBMENUS */
 
@@ -85,17 +76,17 @@ document.querySelectorAll(".menu-toggle").forEach((button) => {
 
     const isOpen = panel.classList.contains("open");
 
-    document.querySelectorAll(".submenu-panel").forEach((item) => {
-      item.classList.remove("open");
+    document.querySelectorAll(".submenu-panel").forEach((p) => {
+      p.classList.remove("open");
     });
 
     if (!isOpen) {
       panel.classList.add("open");
     }
 
-    menuImpact(button);
-    cameraHit();
     dirtyClick();
+    cameraHit();
+    bloodBurst(button);
   });
 });
 
@@ -112,151 +103,63 @@ document.addEventListener("click", (event) => {
 
 /* CURSOR */
 
-const cursor = document.querySelector("#cursor");
+document.addEventListener("mousemove", (event) => {
+  if (!cursor) return;
 
-if (cursor) {
-  document.addEventListener("mousemove", (event) => {
-    const size = 26;
+  cursor.style.left = `${event.clientX}px`;
+  cursor.style.top = `${event.clientY}px`;
 
-    const x = Math.min(
-      window.innerWidth - size,
-      Math.max(size, event.clientX)
-    );
+  document.body.style.setProperty(
+    "--px",
+    `${(event.clientX / window.innerWidth - 0.5) * 18}px`
+  );
 
-    const y = Math.min(
-      window.innerHeight - size,
-      Math.max(size, event.clientY)
-    );
+  document.body.style.setProperty(
+    "--py",
+    `${(event.clientY / window.innerHeight - 0.5) * 18}px`
+  );
+});
 
-    cursor.style.left = `${x}px`;
-    cursor.style.top = `${y}px`;
-  });
+document.addEventListener("mousedown", () => {
+  document.body.classList.add("clicking");
+});
 
-  document.addEventListener("mousedown", () => {
-    document.body.classList.add("clicking");
-  });
-
-  document.addEventListener("mouseup", () => {
-    document.body.classList.remove("clicking");
-  });
-}
+document.addEventListener("mouseup", () => {
+  document.body.classList.remove("clicking");
+});
 
 /* AUDIO */
 
 let uiAudio;
 
-const soundClick = new Audio(
-  "https://cdn.pixabay.com/download/audio/2021/08/04/audio_c403e5d7f9.mp3?filename=radio-static-6382.mp3"
-);
-
-const soundHover = new Audio(
-  "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a9d7a6f3.mp3?filename=tv-static-6924.mp3"
-);
-
-soundClick.volume = 0.16;
-soundHover.volume = 0.07;
-
 function getAudio() {
   if (!uiAudio) {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return null;
-
     uiAudio = new AudioContext();
   }
 
   return uiAudio;
 }
 
-function playSound(audio) {
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
-}
-
 function dirtyClick() {
-  playSound(soundClick);
-
   const ctx = getAudio();
   if (!ctx) return;
 
-  const length = Math.floor(ctx.sampleRate * 0.06);
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-
-  for (let i = 0; i < length; i++) {
-    const fade = 1 - i / length;
-    data[i] = (Math.random() * 2 - 1) * fade;
-  }
-
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-
-  const filter = ctx.createBiquadFilter();
-  filter.type = "lowpass";
-  filter.frequency.value = 250;
-
+  const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.08, ctx.currentTime);
+
+  osc.type = "square";
+  osc.frequency.value = 130;
+
+  gain.gain.setValueAtTime(0.025, ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
 
-  noise.connect(filter);
-  filter.connect(gain);
+  osc.connect(gain);
   gain.connect(ctx.destination);
 
-  noise.start();
-}
-
-function dirtyHover() {
-  playSound(soundHover);
-
-  const ctx = getAudio();
-  if (!ctx) return;
-
-  const length = Math.floor(ctx.sampleRate * 0.03);
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-
-  for (let i = 0; i < length; i++) {
-    const fade = 1 - i / length;
-    data[i] = (Math.random() * 2 - 1) * fade * 0.35;
-  }
-
-  const noise = ctx.createBufferSource();
-  noise.buffer = buffer;
-
-  const filter = ctx.createBiquadFilter();
-  filter.type = "bandpass";
-  filter.frequency.value = 330;
-  filter.Q.value = 3;
-
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.02, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
-
-  noise.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-
-  noise.start();
-}
-
-document.addEventListener("mouseenter", (event) => {
-  if (event.target.closest(".ui-sound, button, .military-knob")) {
-    dirtyHover();
-  }
-}, true);
-
-document.addEventListener("click", (event) => {
-  if (event.target.closest(".ui-sound, button, .military-knob")) {
-    dirtyClick();
-  }
-});
-
-/* MENU IMPACT */
-
-function menuImpact(button) {
-  button.classList.remove("hit");
-  void button.offsetWidth;
-  button.classList.add("hit");
+  osc.start();
+  osc.stop(ctx.currentTime + 0.06);
 }
 
 function cameraHit() {
@@ -265,63 +168,7 @@ function cameraHit() {
   document.body.classList.add("camera-hit");
 }
 
-document.querySelectorAll(".nav-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    menuImpact(button);
-    cameraHit();
-  });
-});
-
-/* MOTION TOGGLE */
-
-const motionBtn = document.querySelector("#motionBtn");
-
-if (motionBtn) {
-  motionBtn.addEventListener("click", () => {
-    const isOn = document.body.classList.contains("motion-on");
-
-    document.body.classList.toggle("motion-on", !isOn);
-    document.body.classList.toggle("motion-off", isOn);
-
-    motionBtn.textContent = isOn ? "animações: off" : "animações: on";
-  });
-}
-
-/* PARALLAX */
-
-document.addEventListener("mousemove", (event) => {
-  const x = (event.clientX / window.innerWidth - 0.5) * 18;
-  const y = (event.clientY / window.innerHeight - 0.5) * 18;
-
-  document.body.style.setProperty("--px", `${x}px`);
-  document.body.style.setProperty("--py", `${y}px`);
-});
-
-/* RADIO */
-
-const intro = document.querySelector("#intro");
-const skipBtn = document.querySelector("#skipBtn");
-const audioBtn = document.querySelector("#audioBtn");
-
-const waveA = document.querySelector("#waveA");
-const waveB = document.querySelector("#waveB");
-
-const knobA = document.querySelector("#knobA");
-const knobB = document.querySelector("#knobB");
-
-const lamp = document.querySelector("#lamp");
-const radioStatus = document.querySelector("#radioStatus");
-
-const canvas = document.querySelector("#waveCanvas");
-const ctx = canvas?.getContext("2d");
-
-let radioAudio;
-let radioMaster;
-let radioStatic;
-let radioFilter;
-let radioHum;
-
-let solved = false;
+/* RADIO SOUND */
 
 function startRadioSound() {
   if (radioAudio) return;
@@ -372,8 +219,12 @@ function startRadioSound() {
   noise.start();
   radioHum.start();
 
-  if (audioBtn) audioBtn.style.display = "none";
+  if (audioBtn) {
+    audioBtn.style.display = "none";
+  }
 }
+
+/* RADIO VALUES */
 
 function radioValues() {
   const a = Number(waveA?.value || 0);
@@ -385,12 +236,7 @@ function radioValues() {
   const clarity = Math.max(0, 1 - (distanceA + distanceB) / 95);
   const aligned = distanceA < 4 && distanceB < 4;
 
-  return {
-    a,
-    b,
-    clarity,
-    aligned
-  };
+  return { a, b, clarity, aligned };
 }
 
 function updateRadio() {
@@ -436,9 +282,11 @@ function updateRadio() {
 
   if (aligned && !solved) {
     solved = true;
-    setTimeout(closeIntro, 1000);
+    setTimeout(closeIntroWithBoot, 1000);
   }
 }
+
+/* WAVES */
 
 function drawWaves() {
   if (!canvas || !ctx) return;
@@ -487,31 +335,12 @@ function drawWaves() {
         Math.sin(x * 0.035 + Date.now() * 0.004) * 18 +
         (Math.random() - 0.5) * noiseAmount;
 
-      if (x === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
     }
 
     ctx.stroke();
   }
-}
-
-function closeIntro() {
-  if (radioAudio && radioMaster) {
-    radioMaster.gain.setTargetAtTime(0, radioAudio.currentTime, 0.05);
-
-    setTimeout(() => {
-      radioAudio.close().catch(() => {});
-    }, 300);
-  }
-
-  intro?.classList.add("hide");
-
-  setTimeout(() => {
-    if (intro) intro.style.display = "none";
-  }, 750);
 }
 
 /* KNOBS */
@@ -527,10 +356,7 @@ document.querySelectorAll(".military-knob").forEach((knob) => {
     const centerY = rect.top + rect.height / 2;
 
     let angle =
-      Math.atan2(
-        event.clientY - centerY,
-        event.clientX - centerX
-      ) *
+      Math.atan2(event.clientY - centerY, event.clientX - centerX) *
         180 /
         Math.PI +
       90;
@@ -542,11 +368,9 @@ document.querySelectorAll(".military-knob").forEach((knob) => {
     const targetValue = Math.round((angle / 270) * 100);
     const currentValue = Number(input.value);
 
-    const weightedValue = Math.round(
+    input.value = Math.round(
       currentValue + (targetValue - currentValue) * 0.38
     );
-
-    input.value = weightedValue;
 
     startRadioSound();
     updateRadio();
@@ -554,10 +378,8 @@ document.querySelectorAll(".military-knob").forEach((knob) => {
 
   knob.addEventListener("pointerdown", (event) => {
     dragging = true;
-
     knob.classList.add("dragging");
     knob.setPointerCapture(event.pointerId);
-
     setValue(event);
     dirtyClick();
   });
@@ -578,86 +400,15 @@ document.querySelectorAll(".military-knob").forEach((knob) => {
   });
 });
 
-/* EVENTS */
+/* INTRO / BOOT */
 
-waveA?.addEventListener("input", updateRadio);
-waveB?.addEventListener("input", updateRadio);
-
-audioBtn?.addEventListener("click", () => {
-  startRadioSound();
-  dirtyClick();
-});
-
-skipBtn?.addEventListener("click", () => {
-  closeIntro();
-  dirtyClick();
-});
-
-/* INIT */
-
-updateRadio();
-drawWaves();
-function bloodBurst(element) {
-  const rect = element.getBoundingClientRect();
-
-  const originX = rect.left + rect.width / 2;
-  const originY = rect.top + rect.height / 2;
-
-  const fx = document.createElement("div");
-  fx.className = "blood-art";
-  fx.style.left = `${originX}px`;
-  fx.style.top = `${originY}px`;
-
-  document.body.appendChild(fx);
-
-  for (let i = 0; i < 7; i++) {
-    const streak = document.createElement("span");
-    streak.className = "blood-streak";
-
-    const side = Math.random() > 0.5 ? 1 : -1;
-
-    streak.style.setProperty("--w", `${45 + Math.random() * 90}px`);
-    streak.style.setProperty("--h", `${3 + Math.random() * 8}px`);
-    streak.style.setProperty("--x", `${side * (20 + Math.random() * 90)}px`);
-    streak.style.setProperty("--y", `${-35 + Math.random() * 70}px`);
-    streak.style.setProperty("--rot", `${-35 + Math.random() * 70}deg`);
-
-    fx.appendChild(streak);
-  }
-
-  for (let i = 0; i < 16; i++) {
-    const spark = document.createElement("span");
-    spark.className = "blood-spark";
-
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 25 + Math.random() * 95;
-
-    spark.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
-    spark.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
-    spark.style.setProperty("--s", `${3 + Math.random() * 7}px`);
-
-    fx.appendChild(spark);
-  }
-
-  setTimeout(() => {
-    fx.remove();
-  }, 900);
+function showSite() {
+  site?.classList.add("visible");
 }
 
-document.querySelectorAll(".nav-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    bloodBurst(button);
-  });
-});
-function closeIntro() {
-
+function closeIntroWithBoot() {
   if (radioAudio && radioMaster) {
-
-    radioMaster.gain.setTargetAtTime(
-      0,
-      radioAudio.currentTime,
-      0.05
-    );
+    radioMaster.gain.setTargetAtTime(0, radioAudio.currentTime, 0.05);
 
     setTimeout(() => {
       radioAudio.close().catch(() => {});
@@ -666,123 +417,229 @@ function closeIntro() {
 
   intro?.classList.add("hide");
 
-  const bootScreen =
-    document.querySelector("#bootScreen");
-
-  const site =
-    document.querySelector(".site");
-
   setTimeout(() => {
+    if (intro) intro.style.display = "none";
 
-    if (intro) {
-      intro.style.display = "none";
-    }
-
+    bootScreen?.classList.remove("hide");
     bootScreen?.classList.add("active");
 
-    /* TEMPO DO BOOT */
-
     setTimeout(() => {
-
       bootScreen?.classList.add("hide");
-
-      site?.classList.add("visible");
-
+      showSite();
     }, 4000);
 
     setTimeout(() => {
-
       bootScreen?.classList.remove("active");
-
-      if (bootScreen) {
-        bootScreen.style.display = "none";
-      }
-
+      if (bootScreen) bootScreen.style.display = "none";
     }, 4800);
+  }, 750);
+}
 
+function skipIntro() {
+  intro?.classList.add("hide");
+
+  setTimeout(() => {
+    if (intro) intro.style.display = "none";
+    showSite();
   }, 700);
 }
-const dismissedUpdates =
-  JSON.parse(localStorage.getItem("dismissedUpdates") || "[]");
+
+skipBtn?.addEventListener("click", skipIntro);
+audioBtn?.addEventListener("click", startRadioSound);
+
+/* PAGES */
+
+function hideAllPages() {
+  document.querySelector(".home")?.classList.add("hidden");
+
+  document.querySelectorAll(".page-section").forEach((section) => {
+    section.classList.add("hidden");
+  });
+}
+
+function showHome() {
+  hideAllPages();
+  document.querySelector(".home")?.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.querySelectorAll(".page-link").forEach((button) => {
+  button.addEventListener("click", () => {
+    const pageId = button.dataset.page;
+    const page = document.querySelector(`#${pageId}`);
+
+    document.body.classList.add("page-switching");
+
+    setTimeout(() => {
+      hideAllPages();
+      page?.classList.remove("hidden");
+
+      document.body.classList.remove("page-switching");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 320);
+
+    dirtyClick();
+    cameraHit();
+    bloodBurst(button);
+  });
+});
+
+backHomeBtn?.addEventListener("click", showHome);
+backFromPackageBtn?.addEventListener("click", showHome);
+
+/* PACKAGE PAGE */
+
+function openPackagePage(packageName) {
+  document.body.classList.add("page-switching");
+
+  setTimeout(() => {
+    hideAllPages();
+
+    packagePage?.classList.remove("hidden");
+
+    if (packageTitle) packageTitle.textContent = packageName;
+    if (packageMainTitle) packageMainTitle.textContent = packageName;
+
+    document.querySelectorAll(".submenu-panel").forEach((panel) => {
+      panel.classList.remove("open");
+    });
+
+    document.body.classList.remove("page-switching");
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 320);
+
+  dirtyClick();
+  cameraHit();
+}
+
+document.querySelector("#pacotes")?.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+
+  openPackagePage(button.textContent.trim());
+});
+
+/* MOTION */
+
+motionBtn?.addEventListener("click", () => {
+  const on = document.body.classList.contains("motion-on");
+
+  document.body.classList.toggle("motion-on", !on);
+  document.body.classList.toggle("motion-off", on);
+
+  motionBtn.textContent = on ? "animações: off" : "animações: on";
+
+  dirtyClick();
+});
+
+/* UPDATES */
 
 document.querySelectorAll(".update-item").forEach((item, index) => {
-  const id =
-    item.dataset.updateId || `update-${index}`;
+  const id = item.dataset.updateId || `update-${index}`;
 
-  item.dataset.updateId = id;
-
-  if (dismissedUpdates.includes(id)) {
+  if (localStorage.getItem(id)) {
     item.remove();
     return;
   }
 
-  item.setAttribute("role", "button");
-  item.setAttribute("tabindex", "0");
-  item.title = "Clique para ocultar esta atualização";
-
-  function dismissUpdate() {
-    const saved =
-      JSON.parse(localStorage.getItem("dismissedUpdates") || "[]");
-
-    if (!saved.includes(id)) {
-      saved.push(id);
-      localStorage.setItem("dismissedUpdates", JSON.stringify(saved));
-    }
+  item.addEventListener("click", () => {
+    localStorage.setItem(id, "hidden");
 
     item.classList.add("removing");
 
     setTimeout(() => {
       item.remove();
     }, 280);
+  });
+});
+
+/* BLOOD */
+
+function bloodBurst(element) {
+  const rect = element.getBoundingClientRect();
+
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top + rect.height / 2;
+
+  const fx = document.createElement("div");
+  fx.className = "blood-art";
+
+  document.body.appendChild(fx);
+
+  /* SMEARS */
+
+  for (let i = 0; i < 5; i++) {
+    const smear = document.createElement("span");
+
+    smear.className = "blood-smear";
+
+    smear.style.left = `${originX}px`;
+    smear.style.top = `${originY}px`;
+
+    smear.style.setProperty(
+      "--x",
+      `${(Math.random() - 0.5) * 220}px`
+    );
+
+    smear.style.setProperty(
+      "--y",
+      `${(Math.random() - 0.5) * 140}px`
+    );
+
+    smear.style.setProperty(
+      "--rot",
+      `${Math.random() * 360}deg`
+    );
+
+    smear.style.setProperty(
+      "--w",
+      `${60 + Math.random() * 180}px`
+    );
+
+    smear.style.setProperty(
+      "--h",
+      `${2 + Math.random() * 3}px`
+    );
+
+    fx.appendChild(smear);
   }
 
-  item.addEventListener("click", dismissUpdate);
+ 
 
-  item.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      dismissUpdate();
-    }
-  });
-});
-document.querySelectorAll(".page-link").forEach((button) => {
-  button.addEventListener("click", () => {
-    const pageId = button.dataset.page;
-    const page = document.querySelector(`#${pageId}`);
-    const home = document.querySelector(".home");
+  for (let i = 0; i < 18; i++) {
+    const dot = document.createElement("span");
 
-    document.querySelectorAll(".page-section").forEach((section) => {
-      section.classList.add("hidden");
-    });
+    dot.className = "blood-spark";
 
-    if (home) home.classList.add("hidden");
+    dot.style.left = `${originX}px`;
+    dot.style.top = `${originY}px`;
 
-    if (page) {
-      page.classList.remove("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    dot.style.setProperty(
+      "--s",
+      `${3 + Math.random() * 8}px`
+    );
 
-    dirtyClick();
-    cameraHit();
-  });
-});
-document.querySelectorAll(".page-link").forEach((button) => {
-  button.addEventListener("click", () => {
-    const pageId = button.dataset.page;
-    const page = document.querySelector(`#${pageId}`);
-    const home = document.querySelector(".home");
+    dot.style.setProperty(
+      "--x",
+      `${(Math.random() - 0.5) * 200}px`
+    );
 
-    document.querySelectorAll(".page-section").forEach((section) => {
-      section.classList.add("hidden");
-    });
+    dot.style.setProperty(
+      "--y",
+      `${(Math.random() - 0.5) * 150}px`
+    );
 
-    home?.classList.add("hidden");
+    fx.appendChild(dot);
+  }
 
-    page?.classList.remove("hidden");
+  setTimeout(() => {
+    fx.remove();
+  }, 1000);
+}
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-});
+/* INIT */
+
+updateRadio();
+drawWaves();
